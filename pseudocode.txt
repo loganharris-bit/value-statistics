@@ -1,0 +1,76 @@
+PSEUDOCODE
+Value Statistics - Reading Five Values With a While Loop
+------------------------------------------------------------------
+
+PROGRAM ValueStatistics
+
+    // ---- Declaration Section ----
+
+    CONSTANT REQUIRED     = 5      // values needed
+    CONSTANT MAX_ATTEMPTS = 10     // ceiling on loop passes
+    CONSTANT RATE         = 0.20   // interest rate of 20%
+
+    DECLARE INTEGER count    = 0   // valid values accepted
+    DECLARE INTEGER attempts = 0   // every pass, valid or not
+    DECLARE DECIMAL total    = 0.0
+    DECLARE DECIMAL maximum  = 0.0
+    DECLARE DECIMAL minimum  = 0.0
+    DECLARE DECIMAL value, average, interest
+
+    // ---- Input Section ----
+
+    DISPLAY "Please enter 5 numeric values."
+
+    // Two separate conditions end this loop, so it cannot run forever:
+    // either 5 values are accepted, or the attempt ceiling is reached.
+    WHILE count < REQUIRED AND attempts < MAX_ATTEMPTS
+
+        SET attempts = attempts + 1
+        DISPLAY "Enter value " + (count + 1) + " of 5: "
+
+        IF next input is a number THEN
+            READ value
+
+            // Seed max and min with the first value rather than 0 so
+            // that a set of all-negative numbers still works.
+            IF count = 0 THEN
+                SET maximum = value
+                SET minimum = value
+            ELSE
+                IF value > maximum THEN SET maximum = value
+                IF value < minimum THEN SET minimum = value
+            END IF
+
+            SET total = total + value
+            SET count = count + 1
+
+        ELSE IF more input exists THEN
+            // Discard the bad token. Without this the program would
+            // read the same text forever and the loop would hang.
+            READ and discard one token
+            DISPLAY "that is not a number."
+        ELSE
+            DISPLAY "No more input available."
+            EXIT LOOP
+        END IF
+
+    END WHILE
+
+    // ---- Output Section ----
+
+    IF count < REQUIRED THEN
+        DISPLAY "Stopped after " + attempts + " attempts."
+        DISPLAY "Only " + count + " of 5 values were entered."
+    ELSE
+        SET average  = total / REQUIRED
+        SET interest = total * RATE
+
+        DISPLAY "========== Results =========="
+        DISPLAY "Total:           " + total
+        DISPLAY "Average:         " + average
+        DISPLAY "Maximum:         " + maximum
+        DISPLAY "Minimum:         " + minimum
+        DISPLAY "Interest at 20%: " + interest
+    END IF
+
+END PROGRAM
